@@ -1,2 +1,2 @@
-# template-vscode-project
-Project template containing a basic VS Code setup
+# minecraft-server-scripts
+Bash scripts for administering a Paper Minecraft server on Ubuntu (headless).
