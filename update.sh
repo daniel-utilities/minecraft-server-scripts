@@ -1,27 +1,37 @@
 #!/bin/bash
+WORKING_DIR="$PWD"
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
-PAPER_ROOT=./Paper
-JAVA_HOME=/opt/jdk-17
+PAPER_ROOT="$SCRIPT_DIR/Paper"
+JAVA_HOME="/opt/jdk-17"
 BUILD_DIR="$PAPER_ROOT/build/libs"
-OUTPUT_JAR="./paper.jar"
+OUTPUT_JAR="$SCRIPT_DIR/server.jar"
 
-./stop.sh
+"$SCRIPT_DIR/stop.sh" > /dev/null
 
-cd $PAPER_ROOT
-git pull
+cd "$SCRIPT_DIR"
+if [ ! -d "Paper" ]; then
+    git clone https://github.com/PaperMC/Paper.git
+else
+    cd "Paper" && git pull origin master
+fi
+cd "$PAPER_ROOT"
+git pull origin master
 ./gradlew applyPatches
 ./gradlew createReobfBundlerJar
-cd ..
 
 # Find latest version in the build folder
+cd "$BUILD_DIR/.."
 unset -v LATEST
 for file in "$BUILD_DIR"/*; do
-  [[ $file -nt $LATEST ]] && LATEST=$file
+  [[ "$file" -nt "$LATEST" ]] && LATEST="$file"
 done
 
-echo -e "Replacing \"paper.jar\" with most recent build:\n$LATEST"
-cp $LATEST $OUTPUT_JAR
+echo "Replacing $OUTPUT_JAR with most recent build: $LATEST"
+cp -f "$LATEST" "$OUTPUT_JAR"
 
 echo ""
 echo "Please run ./start.sh to start the server, and ./console.sh to view the console."
 echo ""
+
+cd "$WORKING_DIR"

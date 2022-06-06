@@ -8,7 +8,7 @@ if [ "$(id -u)" -eq 0 ]; then
 fi
 
 echo ""
-echo "IMPOROTANT:"
+echo "IMPORTANT:"
 echo ""
 echo "You are about to connect to the Screen session containing the Minecraft server process."
 echo " - Do NOT use /stop here. Doing so will desync with the system service managing this server. Instead, always run ./stop.sh"

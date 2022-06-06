@@ -5,7 +5,7 @@
 # Stop this server with "sudo systemctl stop minecraft.service"
 
 [Unit]
-Description=Minecraft Server
+Description=Minecraft Server System Service
 After=local-fs.target network.target
 
 [Service]
@@ -13,11 +13,11 @@ After=local-fs.target network.target
 Type=forking
 
 # Security preferences
-#PrivateUsers=true
-#ProtectSystem=full
-#ProtectKernelTunables=true
-#ProtectKernelModules=true
-#ProtectControlGroups=true
+PrivateUsers=true
+ProtectSystem=full
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
 
 # Attempt to restart server if a crash is detected (unlikely to work)
 Restart=on-failure
@@ -26,11 +26,14 @@ RestartSec=60s
 # After calling ExecStop, how long to wait before killing the process
 TimeoutStopSec=180
 
+# ExecStart and ExecStop will be issued under this user
+#User=uksc
+
 # Server start/stop scripts.
 # Intended for these scripts to interact with the screen session.
-WorkingDirectory=/home/uksc/minecraft-server-scripts
-ExecStart=/home/uksc/minecraft-server-scripts/systemctl/start_process.sh
-ExecStop=/home/uksc/minecraft-server-scripts/systemctl/stop_process.sh 
+WorkingDirectory=/home/uksc/minecraft
+ExecStart=/home/uksc/minecraft/systemctl/start_process.sh
+ExecStop=/home/uksc/minecraft/systemctl/stop_process.sh 
 
 [Install]
-WantedBy=default.target
+WantedBy=multi-user.target

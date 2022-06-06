@@ -1,4 +1,4 @@
 #!/bin/bash
 
-sudo systemctl status minecraft
+systemctl status minecraft
 
