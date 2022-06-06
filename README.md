@@ -13,7 +13,9 @@ chmod +x ./install.sh
 
 
 This installs the latest version of Paper MC to ~/minecraft, along with required build and runtime dependencies (OpenJDK 17, Gradle 7).
-Currently the install directory cannot be changed, but since the server is isolated to this user multiple servers can be installed on different users (provided enough RAM and different ports!).
+Currently this install directory cannot be changed.
+
+The server's configuration is isolated to the user, so one system can run multiple servers if each is installed to a different user.
 
 The Minecraft server is managed through a systemd user service so it can (optionally) be started automatically at boot and shutdown gracefully at system shutdown, without risking data loss. The configuration is handled by the install script.
 
