@@ -95,16 +95,23 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
 
 fi
 
-# Set to run at boot
+# Register as a systemd user service
 mkdir -p "$HOME/.config/systemd/user"
 cp -f "$SCRIPT_DIR/systemctl/minecraft.service" "$HOME/.config/systemd/user/minecraft.service"
 systemctl --user enable minecraft
 systemctl --user daemon-reload
-loginctl enable-linger $USER
+echo
+read -r -p "Set server to run automatically at boot? (Y/N): " 
+echo
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+    loginctl enable-linger $USER
+else
+    loginctl disable-linger $USER
+fi
 
 # Reboot
 echo
-echo "A reboot is required. The server should start automatically at boot time."
+echo "A reboot is required."
 read -r -p "Reboot now? (Y/N): " 
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]; then
