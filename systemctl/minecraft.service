@@ -28,8 +28,8 @@ TimeoutStopSec=180
 
 # Server start/stop scripts.
 # Intended for these scripts to interact with the screen session.
-ExecStart=$HOME/minecraft/systemctl/start_process.sh
-ExecStop=$HOME/minecraft/systemctl/stop_process.sh 
+ExecStart=/bin/bash -c "~/minecraft/systemctl/start_process.sh"
+ExecStop=/bin/bash -c "~/minecraft/systemctl/stop_process.sh"
 
 [Install]
 WantedBy=default.target

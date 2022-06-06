@@ -99,6 +99,7 @@ fi
 mkdir -p "$HOME/.config/systemd/user"
 cp -f "$SCRIPT_DIR/systemctl/minecraft.service" "$HOME/.config/systemd/user/minecraft.service"
 systemctl --user enable minecraft
+systemctl --user daemon-reload
 loginctl enable-linger $USER
 
 # Reboot
