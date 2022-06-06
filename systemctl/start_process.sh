@@ -7,7 +7,6 @@ JAVA_HOME="/opt/jdk-17"
 SCREEN_SESSION=minecraft
 
 cd "$SERVER_ROOT"
-echo -e "USER: $USER\nPATH: $PATH" > "./stuff.txt"
 /usr/bin/screen -dmS "$SCREEN_SESSION" "$JAVA_HOME/bin/java"                                            \
 # DEDICATED RAM (Save at least 2GB for OS and other processes)                                          \
     -Xms6G -Xmx6G                                                                                       \
