@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-systemctl status minecraft
+systemctl --user status minecraft
 

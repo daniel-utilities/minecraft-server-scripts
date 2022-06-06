@@ -1,8 +1,9 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-echo "Stopping the Minecraft system service..."
-sudo systemctl stop minecraft
+echo "Stopping the Minecraft server..."
+systemctl --user stop minecraft
 echo ""
-echo "Please use ./start.sh to restart the server"
-echo "instead of launching Java through another method."
+systemctl --user status minecraft
+echo ""
+echo "Please use ./start.sh to restart the server instead of launching Java through another method."
 echo ""

@@ -1,36 +1,35 @@
 # Starts and stops the Minecraft server on-demand, and autoruns on boot
-# After making changes to this file, run "sudo systemctl daemon-reload"
-# Enable this unit with "sudo systemctl enable /path/to/minecraft.service"
-# Start the server with "sudo systemctl start minecraft.service"
-# Stop this server with "sudo systemctl stop minecraft.service"
+# After making changes to this file, run "systemctl --user daemon-reload"
+# Enable this unit with "systemctl enable minecraft"
+# Start the server with "systemctl start minecraft"
+# Stop this server with "systemctl stop minecraft"
 
 [Unit]
 Description=Minecraft Server
-After=local-fs.target network.target
 
 [Service]
-# Forking is required if the command in ExecStart returns immediately
-Type=forking
+# Type=oneshot runs each ExecStart in sequence, blocking until each process exits.
+Type=oneshot
+RemainAfterExit=true
 
 # Security preferences
-#PrivateUsers=true
-#ProtectSystem=full
-#ProtectKernelTunables=true
-#ProtectKernelModules=true
-#ProtectControlGroups=true
+# PrivateUsers=true
+# ProtectSystem=full
+# ProtectKernelTunables=true
+# ProtectKernelModules=true
+# ProtectControlGroups=true
 
 # Attempt to restart server if a crash is detected (unlikely to work)
-Restart=on-failure
-RestartSec=60s
+# Restart=on-failure
+# RestartSec=60s
 
 # After calling ExecStop, how long to wait before killing the process
 TimeoutStopSec=180
 
 # Server start/stop scripts.
 # Intended for these scripts to interact with the screen session.
-WorkingDirectory=/home/uksc/minecraft-server-scripts
-ExecStart=/home/uksc/minecraft-server-scripts/systemctl/start_process.sh
-ExecStop=/home/uksc/minecraft-server-scripts/systemctl/stop_process.sh 
+ExecStart=$HOME/minecraft/systemctl/start_process.sh
+ExecStop=$HOME/minecraft/systemctl/stop_process.sh 
 
 [Install]
 WantedBy=default.target

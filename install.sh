@@ -1,8 +1,16 @@
 #!/usr/bin/env bash
 WORKING_DIR="$PWD"
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+INSTALL_DIR="$HOME/minecraft"
 
-# Download and unpack OpenJDK 17 (Required by Paper Server)
+# Prerequisites
+sudo apt-get update
+sudo apt-get install -y libpam-systemd wget curl unzip tar screen
+
+# Stop server if it is still running
+"$SCRIPT_DIR/stop.sh" > /dev/null
+
+# Download and unpack OpenJDK 17
 echo
 read -r -p "Install OpenJDK 17? (Y/N): " 
 echo
@@ -17,12 +25,12 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
 
     # Add Java executables to PATH
     JAVA_HOME="/opt/jdk-17"
-    APPEND_1="export PATH=\"\$PATH:$JAVA_HOME/bin\""
-    APPEND_2="export JAVA_HOME=\"$JAVA_HOME\""
-    FILE="/etc/bash.bashrc"
-    sudo grep -qxF "$APPEND_1" "$FILE" || echo "$APPEND_1" | sudo tee -a "$FILE" > /dev/null
-    sudo grep -qxF "$APPEND_1" "$FILE" || echo "$APPEND_1" | sudo tee -a "$FILE" > /dev/null
-    source /etc/bash.bashrc
+    WRITE="export JAVA_HOME=\"$JAVA_HOME\"\nexport PATH=\"\$PATH:\$JAVA_HOME/bin\"\n"
+    FILE="/etc/profile.d/java-path.sh"
+    echo -e "$WRITE" | sudo tee "$FILE" > /dev/null
+    sudo chmod a+x "$FILE"
+
+    source "/etc/profile"
 
     echo "Java has been installed to $JAVA_HOME"
     java -version
@@ -36,7 +44,6 @@ read -r -p "Install Gradle 7.4.2? (Y/N): "
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]; then
 
-    sudo apt install unzip
     GRADLE_ZIP="gradle-7.4.2-bin.zip"
     [ ! -f "$GRADLE_ZIP" ] && wget "https://downloads.gradle-dn.com/distributions/$GRADLE_ZIP"
     sudo mkdir "/opt/gradle"
@@ -45,13 +52,12 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
 
     # Add Gradle executables to PATH
     GRADLE_HOME="/opt/gradle/gradle-7.3.1"
-    FILENAME="/etc/bash.bashrc"
-    APPEND_1="export PATH=\"\$PATH:$GRADLE_HOME/bin\""
-    APPEND_2="export GRADLE_HOME=\"$GRADLE_HOME\""
-    FILE="/etc/bash.bashrc"
-    sudo grep -qxF "$APPEND_1" "$FILE" || echo "$APPEND_1" | sudo tee -a "$FILE" > /dev/null
-    sudo grep -qxF "$APPEND_1" "$FILE" || echo "$APPEND_1" | sudo tee -a "$FILE" > /dev/null
-    source /etc/bash.bashrc
+    WRITE="export GRADLE_HOME=\"$GRADLE_HOME\"\nexport PATH=\"\$PATH:\$GRADLE_HOME/bin\"\n"
+    FILE="/etc/profile.d/gradle-path.sh"
+    echo -e "$WRITE" | sudo tee "$FILE" > /dev/null
+    sudo chmod a+x "$FILE"
+
+    source "/etc/profile"
 
     echo "Gradle has been installed to $GRADLE_HOME"
     gradle -version
@@ -61,17 +67,44 @@ fi
 
 # Clone Paper Minecraft Server Repo
 echo
-read -r -p "Download and build latest Paper MC Server? (Y/N): " 
+echo "The server will install to \"$INSTALL_DIR\"."
+echo "If a server already exists at this location it will be updated to the latest version."
+echo "Existing world files and configuration will not be affected."
+echo
+read -r -p "Continue to download and install Paper MC Server? (Y/N): " 
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]; then
 
-    "$SCRIPT_DIR/update.sh"
+    mkdir -p "$INSTALL_DIR/systemctl"
+    cd "$INSTALL_DIR"
+    cp -f "$SCRIPT_DIR/console.sh" "./"
+    cp -f "$SCRIPT_DIR/start.sh" "./"
+    cp -f "$SCRIPT_DIR/status.sh" "./"
+    cp -f "$SCRIPT_DIR/stop.sh" "./"
+    cp -f "$SCRIPT_DIR/update.sh" "./"
+    chmod +x "./*.sh"
+    cp -f "$SCRIPT_DIR/systemctl/start_process.sh" "./systemctl/"
+    cp -f "$SCRIPT_DIR/systemctl/stop_process.sh" "./systemctl/"
+    cp -f "$SCRIPT_DIR/systemctl/stuff_process.sh" "./systemctl/"
+    chmod +x "./systemctl/*.sh"
+
+    "./update.sh"
 
 fi
 
 # Set to run at boot
-sudo apt-get install libpam-systemd
-mkdir -p "~/.config/systemd/user"
-cp -f "$SCRIPT_DIR/systemctl/minecraft.service" "~/.config/systemd/user/minecraft.service"
+mkdir -p "$HOME/.config/systemd/user"
+cp -f "$SCRIPT_DIR/systemctl/minecraft.service" "$HOME/.config/systemd/user/minecraft.service"
 systemctl --user enable minecraft
 loginctl enable-linger $USER
+
+# Reboot
+echo
+echo "A reboot is required. The server should start automatically at boot time."
+read -r -p "Reboot now? (Y/N): " 
+echo
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+
+    sudo shutdown -r now
+
+fi

@@ -3,7 +3,6 @@ WORKING_DIR="$PWD"
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 PAPER_ROOT="$SCRIPT_DIR/Paper"
-JAVA_HOME="/opt/jdk-17"
 BUILD_DIR="$PAPER_ROOT/build/libs"
 OUTPUT_JAR="$SCRIPT_DIR/server.jar"
 

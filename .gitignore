@@ -2,4 +2,4 @@
 !/systemctl
 !/README.md
 !/*.sh
-!/workspace.code-workspace
+!/minecraft-server-scripts.code-workspace
