@@ -5,7 +5,7 @@ Bash scripts for installing and administering a high-performance [PaperMC](https
 Download the repo, then run ./install.sh:
 
 ```
-git clone https://github.com/danielk-98/minecraft-server-scripts.git
+git clone https://github.com/daniel-scripts/minecraft-server-scripts.git
 cd minecraft-server-scripts
 chmod +x ./install.sh
 ./install.sh
