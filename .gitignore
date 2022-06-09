@@ -1,5 +1,2 @@
-/*
-!/systemctl
-!/README.md
-!/*.sh
-!/minecraft-server-scripts.code-workspace
+.vscode
+*.code-workspace
