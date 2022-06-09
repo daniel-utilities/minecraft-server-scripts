@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
-WORKING_DIR="$PWD"
-SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
 
 PAPER_ROOT="$SCRIPT_DIR/Paper"
 BUILD_DIR="$PAPER_ROOT/build/libs"
@@ -32,5 +31,3 @@ cp -f "$LATEST" "$OUTPUT_JAR"
 echo ""
 echo "Please run ./start.sh to start the server, and ./console.sh to view the console."
 echo ""
-
-cd "$WORKING_DIR"

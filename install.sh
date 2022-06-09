@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
-WORKING_DIR="$PWD"
-SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
 INSTALL_DIR="$HOME/minecraft"
 
 # Prerequisites

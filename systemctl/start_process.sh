@@ -1,6 +1,5 @@
 #!/bin/bash
-WORKING_DIR="$PWD"
-SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
 SERVER_ROOT="$(dirname "$SCRIPT_DIR")"
 JARFILE="$SERVER_ROOT/server.jar"
 JAVA_HOME="/opt/jdk-17"
