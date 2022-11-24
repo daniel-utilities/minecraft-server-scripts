@@ -1,13 +1,15 @@
 # minecraft-server-scripts
 Bash scripts for installing and administering a high-performance [PaperMC](https://papermc.io/) Minecraft server on Ubuntu (headless).
 
-# Installation
-Download the repo, then run ./install.sh:
-
+## Installation
+Clone this repo to your system *with submodules*.
 ```
-git clone https://github.com/daniel-scripts/minecraft-server-scripts.git
+git clone --recursive https://github.com/daniel-utilities/minecraft-server-scripts.git
 cd minecraft-server-scripts
-chmod +x ./install.sh
+```
+Then run the installation script:
+```
+chmod +x install.sh
 ./install.sh
 ```
 
